@@ -1,5 +1,6 @@
 from lsecmail.sync import ISecMail
-from lsecmail.schemas import EmailAddresses
+from lsecmail.schemas import EmailAddresses, MailBox, Message
+import secrets
 
 
 def test_import():
@@ -13,3 +14,31 @@ def test_gen_random_mailbox():
     assert len(emails) == 1
     for email in emails:
         assert isinstance(email, EmailAddresses)
+
+
+def test_get_domain_list():
+    isecmail = ISecMail()
+    domain_list = isecmail.get_domain_list()
+    assert isinstance(domain_list, list)
+
+
+def test_get_messages(get_login):
+    isecmail = ISecMail()
+    messages = isecmail.get_messages(login=get_login.login, domain=get_login.domain)
+    assert isinstance(messages, list)
+    for message in messages:
+        assert isinstance(message, MailBox)
+
+
+def test_read_message(get_login):
+    isecmail = ISecMail()
+    messages = isecmail.read_message(login=get_login.login, domain=get_login.domain, message_id=get_login.message_id)
+    assert isinstance(messages, Message)
+
+
+def test_download_attachment(get_login):
+    isecmail = ISecMail()
+    attachment = isecmail.download_attachment(login=get_login.login, domain=get_login.domain,
+                                              message_id=get_login.message_id,
+                                              filename=get_login.filename)
+    assert isinstance(attachment, bytes)
