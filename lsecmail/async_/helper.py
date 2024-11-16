@@ -11,7 +11,7 @@ class ISecMail:
     root_path = ROOT_PATH
 
     def __init__(self):
-        self.client = httpx.AsyncClient(timeout=None)
+        self.client:httpx.AsyncClient = httpx.AsyncClient(timeout=None)
 
     async def gen_random_mailbox(self, count: int | None = 5) -> list[EmailAddresses]:
         response = await self.client.get(f"{self.root_path}?action=genRandomMailbox&count={count}")
