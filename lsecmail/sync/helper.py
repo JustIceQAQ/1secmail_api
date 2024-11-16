@@ -1,5 +1,3 @@
-from typing import Any
-
 import httpx
 from ..schemas import EmailAddresses, MailBox, Message
 
