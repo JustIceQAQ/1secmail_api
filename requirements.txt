@@ -1,1 +1,2 @@
-httpx
+httpx # https://github.com/encode/httpx
+pydantic[email] # https://github.com/pydantic/pydantic
