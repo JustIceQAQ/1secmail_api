@@ -1,20 +1,16 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, Field, model_validator, EmailStr
 
 
-@dataclass
-class Mailbox:
-    id_: int  # Message id
-    from_: str  # Sender email address
-    subject: str  # Subject
-    date: str  # Receive date
+class EmailAddresses(BaseModel):
+    email: EmailStr
+    login: str | None = Field(default=None)
+    domain: str | None = Field(default=None)
 
-    @classmethod
-    def from_dict(cls, raw_data) -> "Mailbox":
-        return cls(
-            id_=raw_data['id'],
-            from_=raw_data['from'],
-            subject=raw_data['subject'],
-            date=raw_data['date']
-        )
-
-
+    @model_validator(mode="after")
+    def split_email(cls, value: "EmailAddresses"):
+        email = value.email
+        if "@" in email:
+            login, domain = email.split("@")
+            value.login = login
+            value.domain = domain
+        return value
